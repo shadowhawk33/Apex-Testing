@@ -4,6 +4,8 @@ private class DataGenerationTests {
 static void testBruteForceAccountCreation() {
 // GIVEN
 List<Account> accts;
+Account a = new Account(name='McTesterson LLC');
+insert a;
 // WHEN
 Test.startTest();
 accts = [SELECT Id FROM Account];
