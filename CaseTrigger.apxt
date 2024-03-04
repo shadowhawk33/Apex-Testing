@@ -1,0 +1,28 @@
+trigger CaseTrigger on Case (after insert) {
+    List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+    List<CaseComment> comments = new List<CaseComment>();
+
+    for (Case c : Trigger.new) {
+        if (c.Origin == 'Web' && c.Description != null) {
+            //Email message
+            Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+            email.setTargetObjectId(c.OwnerId);
+            email.setSubject('New Case Created: ' + c.CaseNumber);
+            email.setPlainTextBody('A new case has been created with the following details:\n\n' +
+                'Case Number: ' + c.CaseNumber + '\n' +
+                'Description: ' + c.Description);
+            email.setSaveAsActivity(false);
+            emails.add(email);
+
+            //Case comment
+            CaseComment comment = new CaseComment(ParentId = c.Id, CommentBody = 'Case created.');
+            comments.add(comment);
+        }
+    }
+    if (!emails.isEmpty()) {
+        Messaging.sendEmail(emails);
+    }
+    if (!comments.isEmpty()) {
+        insert comments;
+    }
+}
