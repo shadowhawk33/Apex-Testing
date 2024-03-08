@@ -1,0 +1,36 @@
+trigger UpdateOpportunityDescription on Account (after update) {
+    // Get IDs of Account whose Type field updated
+    Set<Id> accIds = new Set<Id>();
+    for (Account acc : Trigger.new) 
+    {
+        if (acc.Type != Trigger.oldMap.get(acc.Id).Type) 
+        {
+            accIds.add(acc.Id);
+        }
+    }
+
+    //No Accounts were updated, exit the trigger
+    if (accIds.isEmpty()) 
+    {
+        return;
+    }
+
+    // Get Opportunities related of updated Accounts
+    List<Opportunity> opps = [SELECT Id, Description, AccountId FROM Opportunity WHERE AccountId IN :accIds ORDER BY CreatedDate DESC];
+    Map<Id, Opportunity> accIdToLatestOpp = new Map<Id, Opportunity>();
+    for (Opportunity opp : opps) 
+    {
+        //No Opportunity for this Account, and Description is not blank, add it to the map
+        if (!accIdToLatestOpp.containsKey(opp.AccountId) && opp.Description != null && opp.Description != '') 
+        {
+            accIdToLatestOpp.put(opp.AccountId, opp);
+        }
+    }
+
+    // Update the Description field of the Opportunities
+    for (Opportunity opp : accIdToLatestOpp.values()) 
+    {
+        opp.Description = 'Description has been updated';
+    }
+    update accIdToLatestOpp.values();
+}
