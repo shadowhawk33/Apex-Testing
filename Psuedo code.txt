@@ -1,0 +1,53 @@
+Psuedo code
+
+1. List
+List <datatype> list_name
+	[= new List<datatype>();] |
+	[= new List<datatype>{value [, value2. . .] };] |
+	;
+
+E.g.: List<Integer> My_List = new List<Integer>();
+
+2. Set
+Set<datatype> set_name
+	[= new Set<datatype>();] |
+	[= new Set<datatype>{value [, value2. . .] };] |
+	;
+
+E.g.: Set<String> My_String = new Set<String>{'a', 'b', 'c'};
+	Set<String> myStringSet = new Set<String>();
+	:- Set--> key word
+	:- Integer --> primitive data type within <>
+	:- 
+
+3. Map
+Map<key_datatype, value_datatype> map_name
+	[= new map<key_datatype, value_datatype>();] |
+	[= new map<key_datatype, value-datatype>
+	{key1_value => value1_value
+	[, key2_value => value2_value. . .]};] |
+	;
+
+E.g.: Map<Integer, String> My_Map = new Map<Integer, String>{1 => 'a', 2 => 'b', 3 => 'c'};
+
+
+-|- (JavaScript) OBJECT CREATION (LWC)
+
+1. Object Literal Notation
+const bike = {
+	gears: 10,
+	currentGear: 3,
+	changeGear: function(direction, changeBy)
+		{//... Logic...//}
+};
+
+2. Constructor (LWC)
+function Bike(gears, currentGear) 
+	{
+	this.gears = gears;
+	this.currentGear = currentGear;
+	this.changeGear = function(direction, changeBy)
+		{//...Logic...//}
+	};
+}
+const myBike = new Bike(10, 3);
